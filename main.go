@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -16,6 +17,42 @@ type Book struct {
 
 type Repository struct {
 	DB *gorm.DB
+}
+
+func (r *Repository) CreateBook(context *fiber.Ctx) error {
+	book := Book{}
+	err := context.BodyParser(&book)
+
+	if err != nil {
+		context.Status(http.StatusUnprocessableEntity).JSON(
+			&fiber.Map{"message": "request failed"})
+		return err
+	}
+
+	err = r.DB.Create(&book).Error
+
+	if err != nil {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "No se pudo crear el libro"})
+		return err
+	}
+
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "Libro creado exitosamnete"})
+
+	return nil
+}
+
+func (r *Repository) GetBooks(context *fiber.Ctx) error {
+	bookModels := &[]models.Books{}
+
+	err := r.DB.Find(bookModels).Error
+	if err != nil {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "Lo siento, el libro no pudo ser obtenido"})
+		return err
+	}
+
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "Libro obtenido existosamente", "data": bookModels})
+
+	return nil
 }
 
 func (r *Repository) SetupRoutes(app *fiber.App) {
