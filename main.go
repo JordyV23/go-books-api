@@ -14,9 +14,9 @@ import (
 )
 
 type Book struct {
-	Author  string `json:"author"`
-	Title   string `json:"title"`
-	Publish string `json:"publisher"`
+	Author    string `json:"author"`
+	Title     string `json:"title"`
+	Publisher string `json:"publisher"`
 }
 
 type Repository struct {
