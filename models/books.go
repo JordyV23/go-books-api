@@ -12,6 +12,7 @@ type Books struct {
 
 //MigrateBooks crea la tabla de libros
 func MigrateBooks(db *gorm.DB) error {
+	//Se crea la tabla de libros
 	err := db.AutoMigrate(&Books{})
 	return err
 }

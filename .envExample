@@ -1,0 +1,7 @@
+DB_HOST=localhost
+DB_PORT=1111
+DB_PASSWORD=password
+DB_USER=user
+DB_NAME=db
+DB_SSLMODE=disable
+APP_PORT=:3000
